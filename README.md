@@ -28,3 +28,10 @@
     https://github.com/eldar/pose-tensorflow
     
     https://github.com/MVIG-SJTU/AlphaPose
+
+# Contribuidores
+
+   Marta Ventosa
+   Raquel
+   Will
+   Estela Balboa
