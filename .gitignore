@@ -5,6 +5,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+### IDE
+.idea
+
+models/mpii/mpii-single-resnet-101*
+
 # C extensions
 *.so
 
