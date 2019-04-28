@@ -28,6 +28,8 @@
     https://github.com/eldar/pose-tensorflow
     
     https://github.com/MVIG-SJTU/AlphaPose
+    
+    Instagram cuenta con aproximadamente 12 millones de hashtags con la palabra clave pilates 
 
 # Contribuidores
 
@@ -40,7 +42,7 @@
   Ai-Saturdays \
   [Pablo Talavante](https://github.com/pablotalavante) \
   [Marcos Gómez](https://github.com/margobra8) \
-  [David Griñán]()
+  [David Griñán](https://github.com/nanirg)
   
 
 # Proyecto Base: Human Pose Estimation with TensorFlow
