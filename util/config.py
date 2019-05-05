@@ -8,7 +8,6 @@ from easydict import EasyDict as edict
 import os
 import util.default_config
 
-
 cfg = util.default_config.cfg
 
 
@@ -21,7 +20,7 @@ def _merge_a_into_b(a, b):
 
     for k, v in a.items():
         # a must specify keys that are in b
-        #if k not in b:
+        # if k not in b:
         #    raise KeyError('{} is not a valid config key'.format(k))
 
         # recursively merge dicts
@@ -43,11 +42,11 @@ def cfg_from_file(filename):
 
     _merge_a_into_b(yaml_cfg, cfg)
 
-    logging.info("Config:\n"+pprint.pformat(cfg))
+    logging.info("Config:\n" + pprint.pformat(cfg))
     return cfg
 
 
-def load_config(filename = "pose_cfg.yaml"):
+def load_config(filename="pose_cfg.yaml"):
     if 'POSE_PARAM_PATH' in os.environ:
         filename = os.environ['POSE_PARAM_PATH'] + '/' + filename
     return cfg_from_file(filename)

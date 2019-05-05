@@ -7,6 +7,7 @@ import scipy.io
 import scipy.ndimage
 import json
 from json import encoder
+
 encoder.FLOAT_REPR = lambda o: format(o, '.2f')
 
 from util.config import load_config
@@ -48,7 +49,7 @@ def test_net(visualise, cache_scoremaps, development):
     coco_results = []
 
     for k in range(num_images):
-        print('processing image {}/{}'.format(k, num_images-1))
+        print('processing image {}/{}'.format(k, num_images - 1))
 
         batch = dataset.next_batch()
 
@@ -74,7 +75,7 @@ def test_net(visualise, cache_scoremaps, development):
                 scipy.io.savemat(out_fn, mdict=dict)
                 continue
         else:
-            #cache_name = '1.mat'
+            # cache_name = '1.mat'
             full_fn = os.path.join(cfg.cached_scoremaps, cache_name)
             mlab = scipy.io.loadmat(full_fn)
             scmap = mlab["scoremaps"]
@@ -87,7 +88,7 @@ def test_net(visualise, cache_scoremaps, development):
 
         if visualise:
             img = np.squeeze(batch[Batch.inputs]).astype('uint8')
-            #visualize.show_heatmaps(cfg, img, scmap, pose)
+            # visualize.show_heatmaps(cfg, img, scmap, pose)
 
             """
             # visualize part detections after NMS
@@ -97,19 +98,18 @@ def test_net(visualise, cache_scoremaps, development):
             visualize.waitforbuttonpress()
             """
 
-#            """
+            #            """
             visim_multi = img.copy()
             draw_multi.draw(visim_multi, dataset, person_conf_multi)
 
             plt.imshow(visim_multi)
             plt.show()
             visualize.waitforbuttonpress()
-#            """
-
+        #            """
 
         if cfg.use_gt_segm:
             coco_img_results = pose_predict_with_gt_segm(scmap, locref, cfg.stride, batch[Batch.data_item].gt_segm,
-                                                      batch[Batch.data_item].coco_id)
+                                                         batch[Batch.data_item].coco_id)
             coco_results += coco_img_results
             if len(coco_img_results):
                 dataset.visualize_coco(coco_img_results, batch[Batch.data_item].visibilities)
