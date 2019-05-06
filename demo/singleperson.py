@@ -21,7 +21,7 @@ cfg = load_config("pose_cfg.yaml")
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read images from a path
-pose_image_resources = "../pose_images/*resized*"
+pose_image_resources = "../pose_images/resized/*"
 
 
 def write_csv(position_data, file_name, save_error=True):
@@ -53,38 +53,36 @@ for images in glob.glob(pose_image_resources):
 
         file_name = "position_data_resized_witherrors.csv"
         labels: List[Any] = ['x_ankle_l', 'y_ankle_l', 'error_ankle_l',
-                  'x_ankle_r', 'y_ankle_r', 'error_ankle_r',
-                  'x_knee_l', 'y_knee_l', 'error_knee_l',
-                  'x_knee_r', 'y_knee_r', 'error_knee_r',
-                  'x_hip_l', 'y_hip_l', 'error_hip_l',
-                  'x_hip_r', 'y_hip_r', 'error_hip_r',
-                  'x_wrist_l', 'y_wrist_l', 'error_wrist_l',
-                  'x_wrist_r', 'y_wrist_r', 'error_wrist_r',
-                  'x_elbow_l', 'y_elbow_l', 'error_elbow_l',
-                  'x_elbow_r', 'y_elbow_r', 'error_elbow_r',
-                  'x_shoulder_l', 'y_shoulder_l', 'error_shoulder_l',
-                  'x_shoulder_r', 'y_shoulder_r', 'error_shoulder_r',
-                  'x_chin', 'y_chin', 'error_chin',
-                  'x_forehead', 'y_forehead', 'error_forehead']
+                             'x_ankle_r', 'y_ankle_r', 'error_ankle_r',
+                             'x_knee_l', 'y_knee_l', 'error_knee_l',
+                             'x_knee_r', 'y_knee_r', 'error_knee_r',
+                             'x_hip_l', 'y_hip_l', 'error_hip_l',
+                             'x_hip_r', 'y_hip_r', 'error_hip_r',
+                             'x_wrist_l', 'y_wrist_l', 'error_wrist_l',
+                             'x_wrist_r', 'y_wrist_r', 'error_wrist_r',
+                             'x_elbow_l', 'y_elbow_l', 'error_elbow_l',
+                             'x_elbow_r', 'y_elbow_r', 'error_elbow_r',
+                             'x_shoulder_l', 'y_shoulder_l', 'error_shoulder_l',
+                             'x_shoulder_r', 'y_shoulder_r', 'error_shoulder_r',
+                             'x_chin', 'y_chin', 'error_chin',
+                             'x_forehead', 'y_forehead', 'error_forehead']
 
         features_df: List[Any] = (list(chain.from_iterable(pose)))
         print(labels)
         print(features_df)
-        write_csv(features_df, file_name)
+        # write_csv(features_df, file_name)
         # TODO: provisional, queremos guardar el pandasDF como CSV
 
 
-        features_pd_df = pd.DataFrame(features_df, columns=labels, dtype=float)
-        display(features_pd_df.describe())
-        #features_pd_df.toCSV(file_name, sep=',')
-
-
+        # features_pd_df.toCSV(file_name, sep=',')
 
         # TODO: normalizar las imagenes, entre las dimensiones de las imágenes--> hacemos el script resize_images.py
 
     except Exception as e:
         print(e)
 
+features_pd_df = pd.read_csv('position_data_resized_witherrors.csv', sep=",")
+display(features_pd_df.describe(include="all"))
 ## Guardar las coordenadas y pasarselo al RF o al SVM
 
 # # Load dataset
