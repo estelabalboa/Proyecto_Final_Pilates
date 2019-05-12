@@ -28,9 +28,9 @@ sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read images from a path
 # pose_image_resources_rw = "../pose_images/DownwardDog/*.jpeg"
-# pose_image_resources ="../pose_images/all/*.jpeg"
-# Uncomment this line and comment line before for development purposes (increase time execution)
-pose_image_resources = "../pose_images/acc/*.jpeg"
+pose_image_resources ="../pose_images/all/*.jpeg"
+# Uncomment this line and comment line before for development purposes (increase time execution)£
+#pose_image_resources = "../pose_images/acc/*.jpeg" # 26 samples 6 testing set --> Score 0,767
 
 # Images normalization --> using resize_images.py script
 
