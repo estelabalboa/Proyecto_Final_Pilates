@@ -1,7 +1,10 @@
 from PIL import Image
 import os
 
-path = "../pose_images/DownwardDog/Right/"
+#path = "../pose_images/DownwardDog/Right/"
+#path = "../pose_images/Plank/Right/"
+#path = "../pose_images/Tree/Right/"
+path = "../pose_images/WarriorII/Right/"
 dirs = os.listdir(path)
 final_size = 512;
 
@@ -18,7 +21,10 @@ def resize_aspect_fit():
             im = im.resize(new_image_size, Image.ANTIALIAS)
             new_im = Image.new("RGB", (final_size, final_size))
             new_im.paste(im, ((final_size - new_image_size[0]) // 2, (final_size - new_image_size[1]) // 2))
-            new_im.save(f + '_downward_right_resized.jpeg', 'JPEG', quality=90)
+            #new_im.save(f + '_downward_right_resized.jpeg', 'JPEG', quality=90)
+            #new_im.save(f + '_plank_right_resized.jpeg', 'JPEG', quality=90)
+            #new_im.save(f + '_tree_right_resized.jpeg', 'JPEG', quality=90)
+            new_im.save(f + '_warrior_right_resized.jpeg', 'JPEG', quality=90)
             print("RESIZE DONE")
 
 
