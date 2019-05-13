@@ -10,14 +10,13 @@ from IPython.core.display import display
 from numpy.core._multiarray_umath import ndarray
 from pandas import DataFrame
 
-from pyspark.mllib.tree import RandomForest
-
 matplotlib.use("TKAgg")
 from matplotlib import pyplot as plt
 from util.config import load_config
 from nnet import predict
 from util import visualize
 from dataset.pose_dataset import data_to_input
+from sklearn.metrics import confusion_matrix
 
 # import resize_images
 
@@ -27,11 +26,11 @@ cfg = load_config("pose_cfg.yaml")
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read images from a path
-# pose_image_resources_rw = "../pose_images/DownwardDog/*.jpeg"
+# pose_image_resources_rw = "../pose_images/DownwardDog/*.jpeg" # 292 + 64 - Score 0,876
 pose_image_resources ="../pose_images/all/*.jpeg"
 # Uncomment this line and comment line before for development purposes (increase time execution)£
-#pose_image_resources = "../pose_images/acc/*.jpeg" # 26 samples 6 testing set --> Score 0,767
-
+# pose_image_resources = "../pose_images/acc/*.jpeg" # 26 samples 6 testing set --> Score 0,767 (n_estimators=40, max_depth=20) 0,916
+# pose_image_resources ="../pose_images/all_tree/*.jpeg"
 # Images normalization --> using resize_images.py script
 
 features = []
@@ -105,7 +104,7 @@ features_df.loc[features_df['picture_name'].str.contains('Plank'), 'pose'] = 2
 features_df.loc[features_df['picture_name'].str.contains('Tree'), 'pose'] = 3
 features_df.loc[features_df['picture_name'].str.contains('Warrior'), 'pose'] = 4
 
-features_df.to_csv('prepared_data.csv')
+# features_df.to_csv('prepared_data_499.csv')
 
 # for string in features_df['picture_name']:
 #     if 'downward' in string:
@@ -131,7 +130,7 @@ features_df.to_csv('prepared_data.csv')
 
 pd.set_option('display.max_columns', None)
 display(features_df.head(10))
-features_df.to_csv('prepared_data.csv')
+features_df.to_csv('prepared_data_tree.csv')
 
 # # Load dataset
 # data = pd.read_csv(file_name, sep=';')
@@ -165,6 +164,7 @@ features_df = features_df.drop(['picture_name', 'y0', 'y1'], axis=1)
 # FEATURES PARA MODELO 1
 # is_right_raw = features_df['is_right']
 # features_raw = features_df.drop(['is_right'], axis=1)
+# tree pose right and wrong --> Score 0.4148717948717949 , 258 samples
 
 # FEATURES PARA MODELO 2
 is_right_raw = features_df['pose']
@@ -201,6 +201,9 @@ sco = reg.score(X_test, y_test)
 R2 = r2_score(y_test, y_pred)
 print("R2", R2)
 print("Score", sco)
+
+# confusion_matrix(y_test, y_pred)
+plt.show()
 # X_train=
 # y_train=
 # reg = RandomForestRegressor(min_samples_leaf=9, n_estimators=100)
