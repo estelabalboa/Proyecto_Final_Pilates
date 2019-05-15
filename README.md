@@ -34,16 +34,20 @@
 # Contribuidores
 
    Marta Ventosa \
-   Raquel \
-   Will \
+   Raquel Plaza\
+   Wilmer Meneses \
    Estela Balboa
    
 # Agradecimientos
-  Ai-Saturdays \
+  A toda la gente de Ai-Saturdays y en especial a:\
   [Pablo Talavante](https://github.com/pablotalavante) \
   [Marcos Gómez](https://github.com/margobra8) \
   [David Griñán](https://github.com/nanirg)
-  
+
+# Código principal de healthy-poses
+
+     demo/resize_images.py
+     demo/singleperson.py
 
 # Proyecto Base: Human Pose Estimation with TensorFlow
 
