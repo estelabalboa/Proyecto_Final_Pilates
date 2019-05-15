@@ -31,11 +31,15 @@ cfg = load_config("pose_cfg.yaml")
 sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read images from a path
-# pose_image_resources_rw = "../pose_images/DownwardDog/*.jpeg" # 292 + 64 - Score 0,876
-# pose_image_resources = "../pose_images/all_499_right/*"
+pose_image_resources_downward = "../pose_images/Database_Resized/DownwardDog_mixed/*"
+pose_image_resources_plank = "../pose_images/Database_Resized/Plank_mixed/*"
+pose_image_resources_tree = "../pose_images/Database_Resized/Tree_mixed/*"
+pose_image_resources_warrior = "../pose_images/Database_Resized/WarriorII_mixed/*"
+
+pose_image_resources_all_right = "../pose_images/Database_Resized/all_poses_right/*"
 # Uncomment this line and comment line before for development purposes (increase time execution)£
 #
-pose_image_resources = "../pose_images/acc/*.jpeg"  # 26 samples 6 testing set --> Score 0,767 (n_estimators=40, max_depth=20) 0,916
+# pose_image_resources = "../pose_images/acc/*.jpeg"  # 26 samples 6 testing set --> Score 0,767 (n_estimators=40, max_depth=20) 0,916
 # pose_image_resources ="../pose_images/all_tree/*.jpeg"
 # Images normalization --> using resize_images.py script
 
@@ -44,7 +48,7 @@ picture_name = []
 
 
 # Read all images, call cnn model and make predictions about human main body parts
-for images in glob.glob(pose_image_resources):
+for images in glob.glob(pose_image_resources_warrior):
     try:
         image_name = images.title()
         image = plt.imread(images)
@@ -118,11 +122,12 @@ features_df.loc[~features_df['picture_name'].str.contains(r'Downward|Plank|Tree|
 # features_df = features_df.append(y1)
 
 pd.set_option('display.max_columns', None)
-display(features_df.head(10))
+# display(features_df.head(10))
 
 
 # Guardar las coordenadas y pasarselo al RF o al SVM
-features_df.to_csv('prepared_data_tree.csv')
+# TODO: guardar los 5 resultados indep
+features_df.to_csv('prepared_data_all_right.csv')
 
 # Load data
 # data = pd.read_csv(file_name, sep=';')
@@ -150,17 +155,24 @@ features_df.to_csv('prepared_data_tree.csv')
 # features_df = features_df.drop(['picture_name', 'y0', 'y1', 'x_knee_l', 'y_knee_l', 'error_knee_l', 'x_knee_r', 'y_knee_r', 'error_knee_r'], axis=1)
 features_df = features_df.drop(['picture_name', 'y0', 'y1'], axis=1)
 
-# FEATURES PARA MODELO 1
-# is_right_raw = features_df['is_right']
-# features_raw = features_df.drop(['is_right'], axis=1)
+# FEATURES PARA MODEL 1
+pose_raw = features_df['pose']
+features_without_pose_raw = features_df.drop(['pose'], axis=1)
+
+# FEATURES FOR MODEL 2
+is_right_raw = features_df['is_right']
+features_without_is_right_raw = features_df.drop(['is_right'], axis=1)
 # tree pose right and wrong --> Score 0.4148717948717949 , 258 samples
 
-# FEATURES PARA MODELO 2
-is_right_raw = features_df['pose']
-features_raw = features_df.drop(['pose'], axis=1)
 
-# Split the 'features' and 'income' data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(features_raw,
+# Split the 'features' and 'income' data into training and testing sets FOR MODEL 1
+# X_train, X_test, y_train, y_test = train_test_split(features_without_pose_raw,
+                                                    #pose_raw,
+                                                    #test_size=0.33,
+                                                    #random_state=42)
+
+# Split the 'features' and 'income' data into training and testing sets FOR MODEL 2
+X_train, X_test, y_train, y_test = train_test_split(features_without_is_right_raw,
                                                     is_right_raw,
                                                     test_size=0.33,
                                                     random_state=42)
@@ -170,7 +182,7 @@ print("Training set has {} samples.".format(X_train.shape[0]))
 print("Testing set has {} samples.".format(X_test.shape[0]))
 
 # Initialize the randomForest model
-# TODO: ver como se comporta el modelo con error y sin error
+# TODO: research how the model works with and without error variables
 # Import any three supervised learning classification models from sklearn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -210,9 +222,14 @@ display(acc_test)
 import seaborn as sn
 
 plt.figure(figsize=(10, 10))
-plt.title('Confusion matrix of the Random Forest classifier')
+plt.title('Warrior: Confusion matrix - Random Forest Classifier')
 plt.xticks(ha='center', va='top')
-sn.heatmap(cm_rf, cmap='Pastel1_r', xticklabels=poses_dict, yticklabels=poses_dict, annot=True, cbar=False)
+# MODEL 1
+# sn.heatmap(cm_rf, cmap='Pastel1', xticklabels=poses_dict, yticklabels=poses_dict, annot=True, cbar=False)
+
+# MODEL 2
+sn.heatmap(cm_rf, cmap='Pastel1', xticklabels=boolean_dict, yticklabels=boolean_dict, annot=True, cbar=False)
+
 plt.show()
 
 # CALCULATING AUC ROC CURVE
