@@ -2,8 +2,9 @@ import csv
 import glob
 from itertools import chain
 from typing import Any, List
-import pickle
-from sklearn.metrics import r2_score
+
+from sklearn import metrics
+from sklearn.metrics import r2_score, accuracy_score, roc_auc_score
 import matplotlib
 import pandas as pd
 import numpy as np
@@ -15,10 +16,12 @@ matplotlib.use("TKAgg")
 from matplotlib import pyplot as plt
 from util.config import load_config
 from nnet import predict
-from util import visualize
 from sklearn.model_selection import train_test_split
 from dataset.pose_dataset import data_to_input
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import roc_curve, auc
+from util import visualize
+import pickle
 
 # import resize_images
 
@@ -29,7 +32,7 @@ sess, inputs, outputs = predict.setup_pose_prediction(cfg)
 
 # Read images from a path
 # pose_image_resources_rw = "../pose_images/DownwardDog/*.jpeg" # 292 + 64 - Score 0,876
-# pose_image_resources = "../pose_images/all/*.jpeg"
+# pose_image_resources = "../pose_images/all_499_right/*"
 # Uncomment this line and comment line before for development purposes (increase time execution)£
 #
 pose_image_resources = "../pose_images/acc/*.jpeg"  # 26 samples 6 testing set --> Score 0,767 (n_estimators=40, max_depth=20) 0,916
@@ -159,7 +162,7 @@ features_raw = features_df.drop(['pose'], axis=1)
 # Split the 'features' and 'income' data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(features_raw,
                                                     is_right_raw,
-                                                    test_size=0.2,
+                                                    test_size=0.33,
                                                     random_state=42)
 
 # Show the results of the split
@@ -182,7 +185,7 @@ logistic_regression_model.fit(X_train, y_train)
 # Save the model
 
 
-pickle.dumps(logistic_regression_model, open("saved_rfc_model.p", "wb"))
+# pickle.dumps(logistic_regression_model, open("saved_rfc_model.p", "wb"))
 
 y_pred_rf = random_forest_class_model.predict(X_test)
 y_pred_lr = logistic_regression_model.predict(X_test)
@@ -190,26 +193,41 @@ y_pred_lr = logistic_regression_model.predict(X_test)
 
 sco = random_forest_class_model.score(X_test, y_test)
 R2 = r2_score(y_test, y_pred_rf)
-print("R2", R2)
-print("Score", sco)
+print("R2 Random Forest: ", R2)
+print("Score Random forest: ", sco)
 Lr_R2 = r2_score(y_test, y_pred_lr)
-print("Lr_R2", Lr_R2)
+print("R2 Logistic Reg: ", Lr_R2)
+
+confusion_matrix(y_test, y_pred_lr)
 
 cm_rf = confusion_matrix(y_test, y_pred_rf)
-display(confusion_matrix(y_test, y_pred_lr))
-
 display(cm_rf)
+
+acc_test = accuracy_score(y_test, y_pred_rf)
+
+display(acc_test)
 
 import seaborn as sn
 
-plt.figure(figsize=(10, 7))
+plt.figure(figsize=(10, 10))
 plt.title('Confusion matrix of the Random Forest classifier')
-ax = plt.subplot()
-ax.set_xlabel('Predicted labels')
-ax.set_ylabel('True labels')
-
-sn.heatmap(cm_rf, xticklabels=poses_dict, yticklabels=poses_dict, annot=True, cbar=False, ax=ax)
+plt.xticks(ha='center', va='top')
+sn.heatmap(cm_rf, cmap='Pastel1_r', xticklabels=poses_dict, yticklabels=poses_dict, annot=True, cbar=False)
 plt.show()
+
+# CALCULATING AUC ROC CURVE
+from collections import Counter
+display(Counter(y_test))
+
+fpr, tpr, thresholds = metrics.roc_curve(y_test, y_pred_rf, pos_label=0)
+
+# Print ROC curve
+plt.plot(fpr, tpr)
+plt.show()
+
+# Print AUC
+auc = np.trapz(tpr, fpr)
+print('AUC:', auc)
 
 
 def write_csv(position_data, file_name, save_error=True):

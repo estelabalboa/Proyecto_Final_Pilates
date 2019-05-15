@@ -10,6 +10,7 @@ final_size = 512;
 
 
 def resize_aspect_fit():
+
     for item in dirs:
         if os.path.isfile(path + item):
             print(os.path.isfile(path + item))
@@ -23,7 +24,7 @@ def resize_aspect_fit():
             new_im.paste(im, ((final_size - new_image_size[0]) // 2, (final_size - new_image_size[1]) // 2))
             new_im.save(f + '_downward_wrong_resized.jpeg', 'JPEG', quality=90)
             # new_im.save(f + '_plank_wrong_resized.jpeg', 'JPEG', quality=90)
-            # new_im.save(f + '_tree_right_wrong.jpeg', 'JPEG', quality=90)
+            # new_im.save(f + '_tree_wrong_wrong.jpeg', 'JPEG', quality=90)
             # new_im.save(f + '_warrior_wrong_resized.jpeg', 'JPEG', quality=90)
             print("RESIZE DONE")
 
