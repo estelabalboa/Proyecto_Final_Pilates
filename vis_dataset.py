@@ -4,12 +4,14 @@ import numpy as np
 from scipy.misc import imresize
 
 import matplotlib
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 from util.config import load_config
 from dataset.pose_dataset import Batch
 from dataset.factory import create as dataset_create
+
 
 def display_dataset():
     logging.basicConfig(level=logging.DEBUG)
@@ -22,10 +24,10 @@ def display_dataset():
         batch = dataset.next_batch()
 
         for frame_id in range(1):
-            img = batch[Batch.inputs][frame_id,:,:,:]
+            img = batch[Batch.inputs][frame_id, :, :, :]
             img = np.squeeze(img).astype('uint8')
 
-            scmap = batch[Batch.part_score_targets][frame_id,:,:,:]
+            scmap = batch[Batch.part_score_targets][frame_id, :, :, :]
             scmap = np.squeeze(scmap)
 
             # scmask = batch[Batch.part_score_weights]
@@ -49,11 +51,11 @@ def display_dataset():
                 if j >= cfg.num_joints:
                     continue
 
-                scmap_part = scmap[:,:,j]
+                scmap_part = scmap[:, :, j]
                 scmap_part = imresize(scmap_part, 8.0, interp='nearest')
                 scmap_part = np.lib.pad(scmap_part, ((4, 0), (4, 0)), 'minimum')
 
-                curr_plot.set_title("{}".format(j+1))
+                curr_plot.set_title("{}".format(j + 1))
                 curr_plot.imshow(img)
                 curr_plot.hold(True)
                 curr_plot.imshow(scmap_part, alpha=.5)

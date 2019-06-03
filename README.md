@@ -1,4 +1,55 @@
-# Human Pose Estimation with TensorFlow
+# Objetivo del proyecto
+  
+  Con el presente proyecto queremos recoger un conjunto de imagenes posturales 
+  para darles diferente uso o aplicación, por ejemplo:
+  
+     Poder hacer ejercicios de rehabilitación desde casa para pacientes.
+     
+     
+     Hacer ejericios de pilates, la aplicación te muestra una imágen y te pide 
+     mantener dicha postura x segundos.
+     
+     
+     Medicina del trabajo en caso de que el proyecto escale, monitorizar a empleados
+     para reducir riesgos y dar alarmas para corregir postura o hacer descansos. 
+     
+     
+
+# Referencias para el proyecto final de AI-Saturdays
+
+### Datasets posturales - Referencias
+
+    https://github.com/trrahul/densepose-video
+    
+    http://densepose.org/
+    
+    https://research.fb.com/facebook-open-sources-densepose/
+    
+    https://github.com/eldar/pose-tensorflow
+    
+    https://github.com/MVIG-SJTU/AlphaPose
+    
+    Instagram cuenta con aproximadamente 12 millones de hashtags con la palabra clave pilates 
+
+# Contribuidores
+
+   Marta Ventosa \
+   Raquel Plaza\
+   Wilmer Meneses \
+   Estela Balboa
+   
+# Agradecimientos
+  A toda la gente de Ai-Saturdays y en especial a:\
+  [Pablo Talavante](https://github.com/pablotalavante) \
+  [Marcos Gómez](https://github.com/margobra8) \
+  [David Griñán](https://github.com/nanirg)
+
+# Código principal de healthy-poses
+
+     demo/resize_images.py
+     demo/singleperson.py
+
+# Proyecto Base: Human Pose Estimation with TensorFlow
 
 ![](images/teaser.png)
 
